@@ -9,6 +9,11 @@ import com.example.controller.ContractController;
 import com.example.dto.Campaign;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -82,8 +87,13 @@ public class ProcessAd {
        //  res.addHeader("Set-Cookie", "PartnersId=; path=/; domain=.ge.com;Expires=Thu, 01-Jan-1970 00:00:10 GMT");
        
        //how to get the data;
+       SimpleDateFormat COOKIE_EXPIRES_HEADER_FORMAT = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz");
+        COOKIE_EXPIRES_HEADER_FORMAT.setTimeZone(new SimpleTimeZone(0, "GMT"));
+        Date d = new Date();
+        d.setTime(d.getTime() + 3600*24*365 * 1000); //1 year
+        String cookieLifeTime = COOKIE_EXPIRES_HEADER_FORMAT.format(d);
        
-         res.addHeader("Set-Cookie",cookieName+"="+userdata.toString()+"; path=/; domain="+cookieDomain);
+         res.addHeader("Set-Cookie",cookieName+"="+userdata.toString()+"; path=/; domain="+cookieDomain+";Expires"+cookieLifeTime);
          
          
     }
